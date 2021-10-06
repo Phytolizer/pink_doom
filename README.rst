@@ -2,8 +2,8 @@
 Pink Doom
 =========
 
-.. image:: https://img.shields.io/travis/Phytolizer/pink_doom.svg
-        :target: https://travis-ci.com/Phytolizer/pink_doom
+.. image:: https://app.travis-ci.com/Phytolizer/pink_doom.svg?branch=master
+    :target: https://app.travis-ci.com/Phytolizer/pink_doom
 
 .. image:: https://readthedocs.org/projects/pink-doom/badge/?version=latest
         :target: https://pink-doom.readthedocs.io/en/latest/?version=latest
