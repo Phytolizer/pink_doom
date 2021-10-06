@@ -27,7 +27,7 @@ packaging==21.0
 pathspec==0.9.0
 pathtools==0.1.2
 # Editable Git install with no remote (pink-doom==0.1.0)
--e /extra/Code/Python/PinkDoom/pink_doom
+-e git+https://gitlab.com:Phytolizer/pink_doom.git
 pkginfo==1.7.1
 platformdirs==2.4.0
 pluggy==0.13.1
