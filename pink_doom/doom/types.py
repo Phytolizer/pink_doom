@@ -1,0 +1,12 @@
+"""DOOM max/min values."""
+
+MAX_CHAR = 0x7F
+MAX_SHORT = 0x7FFF
+MAX_INT = 0x7FFFFFFF
+MAX_LONG = 0x7FFFFFFFFFFFFFFF
+
+# assumes 2's complement
+MIN_CHAR = -MAX_CHAR - 1
+MIN_SHORT = -MAX_SHORT - 1
+MIN_INT = -MAX_INT - 1
+MIN_LONG = -MAX_LONG - 1
