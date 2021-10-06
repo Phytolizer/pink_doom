@@ -7,6 +7,8 @@ Subpackages
 .. toctree::
 
     pink_doom.doom
+    pink_doom.misc
+    pink_doom.wad
 
 Submodules
 ----------
