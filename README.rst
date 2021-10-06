@@ -2,10 +2,6 @@
 Pink Doom
 =========
 
-
-.. image:: https://img.shields.io/pypi/v/pink_doom.svg
-        :target: https://pypi.python.org/pypi/pink_doom
-
 .. image:: https://img.shields.io/travis/Phytolizer/pink_doom.svg
         :target: https://travis-ci.com/Phytolizer/pink_doom
 
@@ -14,10 +10,13 @@ Pink Doom
         :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/Phytolizer/pink_doom/shield.svg
-     :target: https://pyup.io/repos/github/Phytolizer/pink_doom/
-     :alt: Updates
+.. image:: https://gitlab.com/Phytolizer/pink_doom/badges/master/pipeline.svg
+        :target: https://gitlab.com/Phytolizer/pink_doom/badges/master/pipeline.svg
+        :alt: CI Status
 
+.. image:: https://gitlab.com/Phytolizer/pink_doom/badges/master/coverage.svg
+        :target: https://gitlab.com/Phytolizer/pink_doom/badges/master/coverage.svg
+        :alt: Coverage Status
 
 
 Pink Doom is Doom, but in Python/Pygame!
