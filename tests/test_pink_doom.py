@@ -6,7 +6,6 @@ import pytest
 
 from click.testing import CliRunner
 
-from pink_doom import pink_doom
 from pink_doom import cli
 
 

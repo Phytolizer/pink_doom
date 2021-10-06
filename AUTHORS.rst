@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Kyle Alexander Coffey <me@mail.phytolizer.dev>
+* Kyle Alexander Coffey <me@phytolizer.dev>
 
 Contributors
 ------------
