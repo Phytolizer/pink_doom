@@ -1,7 +1,6 @@
 """Lookup tables."""
 from pink_doom.misc.fixed import FRAC_BITS
 
-
 FINE_ANGLES = 8192
 FINE_MASK = FINE_ANGLES - 1
 

@@ -9,13 +9,9 @@ this header files.
 In practice, things are a bit messy.
 """
 
-from pink_doom.doom.defines import GameMission, GameMode, GameState, Language, Skill
-
-from pink_doom.doom.player import Player, PlayerStatistics
-
 from pink_doom.doom.data import MapThing
-
-
+from pink_doom.doom.defines import GameMission, GameMode, GameState, Language, Skill
+from pink_doom.doom.player import Player, PlayerStatistics
 
 no_monsters = False
 """checkparm of ``-nomonsters``"""
@@ -117,7 +113,7 @@ single_demo = False
 
 game_state = GameState.DEMO_SCREEN
 
-#-----------------------------
+# -----------------------------
 #  Internal parameters, fixed.
 #  These are set by the engine, and not changed
 #  according to user inputs. Partly load from
@@ -130,7 +126,7 @@ player = Player()
 
 player_in_game = False
 
-player_start = MapThing()
+player_start = MapThing(0, 0, 0, 0, 0)
 
 world_map_info = PlayerStatistics()
 
@@ -152,4 +148,3 @@ singletics = False
 body_que_slot = 0
 
 sky_flat_num = 0
-

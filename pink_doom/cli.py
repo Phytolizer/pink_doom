@@ -1,5 +1,6 @@
 """Console script for pink_doom."""
 import sys
+
 import click
 
 
