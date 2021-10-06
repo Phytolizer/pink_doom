@@ -9,7 +9,7 @@ this header files.
 In practice, things are a bit messy.
 """
 
-from pink_doom.doom.defines import GameMission, GameMode, Language, Skill
+from pink_doom.doom.defines import GameMission, GameMode, GameState, Language, Skill
 
 
 no_monsters = False
@@ -103,3 +103,11 @@ level_start_tic = 0
 """Gametic at level start."""
 level_time = 0
 """Tics in-game for par."""
+
+demo_playback = False
+demo_recording = False
+
+single_demo = False
+"""Quit after playing a single demo (from command-line)."""
+
+game_state = GameState.DEMO_SCREEN

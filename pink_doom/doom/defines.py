@@ -80,12 +80,12 @@ by the graphics.
 INV_ASPECT_RATIO = 0.625
 """0.75, ideally."""
 
-SCREENWIDTH = 320
+SCREEN_WIDTH = 320
 """``SCREEN_MUL * BASE_WIDTH == 320``"""
-SCREENHEIGHT = 200
+SCREEN_HEIGHT = 200
 """``SCREEN_MUL * BASE_WIDTH * INV_ASPECT_RATIO == 200``"""
 
-MAXPLAYERS = 1
+MAX_PLAYERS = 1
 """The maximum number of players, this sourceport is singleplayer only."""
 
 TIC_RATE = 35
