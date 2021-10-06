@@ -11,6 +11,11 @@ In practice, things are a bit messy.
 
 from pink_doom.doom.defines import GameMission, GameMode, GameState, Language, Skill
 
+from pink_doom.doom.player import Player, PlayerStatistics
+
+from pink_doom.doom.data import MapThing
+
+
 
 no_monsters = False
 """checkparm of ``-nomonsters``"""
@@ -111,3 +116,40 @@ single_demo = False
 """Quit after playing a single demo (from command-line)."""
 
 game_state = GameState.DEMO_SCREEN
+
+#-----------------------------
+#  Internal parameters, fixed.
+#  These are set by the engine, and not changed
+#  according to user inputs. Partly load from
+#  WAD, partly set at startup time.
+
+gametic = 0
+
+player = Player()
+"""Bookkeeping on players - state."""
+
+player_in_game = False
+
+player_start = MapThing()
+
+world_map_info = PlayerStatistics()
+
+maxammo = []
+"""LUT of ammunition limits for each kind. This doubles with BackPack powerup item"""
+
+# File handling stuff.
+basedefault = ""
+debugfile = None
+
+precache = False
+"""if true, load all graphics at level load"""
+
+wipe_game_state = GameState.WIPE
+
+mouse_sensitivity = 0
+
+singletics = False
+body_que_slot = 0
+
+sky_flat_num = 0
+

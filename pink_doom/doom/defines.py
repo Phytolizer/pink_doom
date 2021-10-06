@@ -104,6 +104,7 @@ class GameState(Enum):
     INTERMISSION = auto()
     FINALE = auto()
     DEMO_SCREEN = auto()
+    WIPE = auto()
 
 
 class MapThingFlag(Enum):
