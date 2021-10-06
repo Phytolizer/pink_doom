@@ -10,15 +10,6 @@ Pink Doom
         :alt: Documentation Status
 
 
-.. image:: https://gitlab.com/Phytolizer/pink_doom/badges/master/pipeline.svg
-        :target: https://gitlab.com/Phytolizer/pink_doom/badges/master/pipeline.svg
-        :alt: CI Status
-
-.. image:: https://gitlab.com/Phytolizer/pink_doom/badges/master/coverage.svg
-        :target: https://gitlab.com/Phytolizer/pink_doom/badges/master/coverage.svg
-        :alt: Coverage Status
-
-
 Pink Doom is Doom, but in Python/Pygame!
 
 
