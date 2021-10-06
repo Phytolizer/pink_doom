@@ -23,7 +23,11 @@ def fixed_div(a, b):
 
 
 def fixed_div2(a, b):
-    """Divides two fixed point numbers for case when we need to do floating point arithmetic."""
+    """
+    Divide two fixed point numbers.
+
+    Used for case when we need to do floating point arithmetic.
+    """
     c = a / b * FRAC_UNIT
     if c > MAX_INT or c < MIN_INT:
         raise ZeroDivisionError("FixedDiv: divide by zero")

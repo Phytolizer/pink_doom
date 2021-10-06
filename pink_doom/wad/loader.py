@@ -38,7 +38,7 @@ class LumpInfo:
 
 
 lump_cache = []
-lump_info = []
+lump_info: list[LumpInfo] = []
 num_lumps = 0
 
 
@@ -96,8 +96,22 @@ def init_multiple_files(filenames):
 
     global num_lumps, lump_cache
     if num_lumps == 0:
-        print(
-            f"pink_doom.wad.loader.init_multiple_files: no files found", file=sys.stderr
-        )
+        print(f"{init_multiple_files.__qualname__}: no files found", file=sys.stderr)
         exit(1)
     lump_cache = [None for _ in range(num_lumps)]
+
+
+def check_num_for_name(name: str) -> int:
+    """Return -1 if lump not found."""
+    for i in range(num_lumps - 1, -1, -1):
+        if lump_info[i].name == name:
+            return i
+    return -1
+
+
+def get_num_for_name(name: str) -> int:
+    """Crash if not found."""
+    i = check_num_for_name(name)
+    if i == -1:
+        print(f"{get_num_for_name.__qualname__}: {name} not found", file=sys.stderr)
+        exit(1)
