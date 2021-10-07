@@ -3,7 +3,6 @@
 """Tests for `pink_doom` package."""
 
 import pytest
-
 from click.testing import CliRunner
 
 from pink_doom import cli

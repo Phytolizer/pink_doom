@@ -115,3 +115,39 @@ def get_num_for_name(name: str) -> int:
     if i == -1:
         print(f"{get_num_for_name.__qualname__}: {name} not found", file=sys.stderr)
         exit(1)
+
+
+def lump_length(lump: int) -> int:
+    """Return the buffer size needed to load the given lump."""
+    if lump >= num_lumps:
+        print(f"{lump_length.__qualname__}: {lump} >= num_lumps", file=sys.stderr)
+        exit(1)
+
+    return lump_info[lump].size
+
+
+def read_lump(lump: int) -> bytes:
+    """Load the lump into a buffer."""
+    if lump >= num_lumps:
+        print(f"{read_lump.__qualname__}: {lump} >= num_lumps", file=sys.stderr)
+        exit(1)
+
+    info = lump_info[lump]
+    handle = info.handle
+    handle.seek(info.position, SEEK_SET)
+    return handle.read(info.size)
+
+
+def cache_lump_num(lump: int) -> bytes:
+    """Get the data within a lump, cached for efficiency."""
+    if lump >= num_lumps:
+        print(f"{cache_lump_num.__qualname__}: {lump} >= num_lumps", file=sys.stderr)
+        exit(1)
+    if lump_cache[lump] is None:
+        lump_cache[lump] = read_lump(lump)
+    return lump_cache[lump]
+
+
+def cache_lump_name(name: str) -> bytes:
+    """Like :func:`cache_lump_num`, but uses a name instead of an index."""
+    return cache_lump_num(get_num_for_name(name))

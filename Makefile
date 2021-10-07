@@ -47,12 +47,16 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
+lint/isort: ## check style with isort
+	isort --check pink_doom tests
+lint/pydocstyle: ## check style with pydocstyle
+	pydocstyle pink_doom tests
 lint/flake8: ## check style with flake8
 	flake8 pink_doom tests
 lint/black: ## check style with black
 	black --check pink_doom tests
 
-lint: lint/flake8 lint/black ## check style
+lint: lint/flake8 lint/black lint/pydocstyle lint/isort ## check style
 
 test: ## run tests quickly with the default Python
 	pytest
