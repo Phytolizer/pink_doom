@@ -124,3 +124,10 @@ def main():
     """Begin running the entire application."""
     _find_response_file()
     _identify_version()
+
+    state.no_monsters = check_parm("-nomonsters") > 0
+    state.respawn_parm = check_parm("-respawn") > 0
+    state.fast_parm = check_parm("-fast") > 0
+    state.dev_parm = check_parm("-devparm") > 0
+
+    # TODO

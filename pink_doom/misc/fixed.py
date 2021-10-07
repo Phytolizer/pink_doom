@@ -5,6 +5,8 @@ from pink_doom.doom.types import MAX_INT, MIN_INT
 FRAC_BITS = 16
 FRAC_UNIT = 1 << FRAC_BITS
 
+Fixed = int
+
 
 def fixed_mul(a, b):
     """Multiplies two fixed point numbers."""
