@@ -70,14 +70,14 @@ def _add_file(name: str):
             num_lumps += header.num_lumps
             for i in range(header.num_lumps):
                 entry = file_info[i * 16 : (i + 1) * 16]
-                ofs, leng, name = struct.unpack("<i i 8s", entry)
+                ofs, leng, entry_name = struct.unpack("<i i 8s", entry)
                 lump_info.append(
                     LumpInfo(
                         f,
                         ofs,
                         leng,
-                        # convert ASCII zero-terminated string to Unicode string
-                        name.decode("utf-8").split("\x00")[0],
+                        # convert ASCII zero-terminated string to Python string
+                        entry_name.split("\x00")[0],
                     )
                 )
                 print(repr(lump_info[start_lump + i].name))
@@ -106,7 +106,7 @@ def init_multiple_files(filenames):
 def check_num_for_name(name: str) -> int:
     """Return -1 if lump not found."""
     for i in range(num_lumps - 1, -1, -1):
-        if lump_info[i].name == name:
+        if lump_info[i].name.lower() == name.lower():
             return i
     return -1
 
