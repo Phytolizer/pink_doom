@@ -130,7 +130,7 @@ player_start = MapThing(0, 0, 0, 0, 0)
 
 world_map_info = PlayerStatistics()
 
-maxammo = []
+maxammo: list[int] = []
 """LUT of ammunition limits for each kind. This doubles with BackPack powerup item"""
 
 # File handling stuff.

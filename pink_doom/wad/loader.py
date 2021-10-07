@@ -2,8 +2,9 @@
 import struct
 import sys
 from dataclasses import dataclass
-from io import SEEK_SET, FileIO
+from io import SEEK_SET
 from os import fstat
+from typing import BinaryIO
 
 import pink_doom.doom.state as state
 
@@ -31,7 +32,7 @@ class FileLump:
 class LumpInfo:
     """Information about a lump in the ``lump_cache``."""
 
-    handle: FileIO
+    handle: BinaryIO
     position: int
     size: int
     name: str
@@ -67,16 +68,17 @@ def _add_file(name: str):
             f.seek(header.info_table_offset, SEEK_SET)
             file_info = f.read(length)
             num_lumps += header.num_lumps
-            lump_info.extend(None for _ in range(header.num_lumps))
             for i in range(header.num_lumps):
                 entry = file_info[i * 16 : (i + 1) * 16]
-                lump_info[start_lump + i] = LumpInfo(
-                    f,
-                    *struct.unpack("<i i 8s", entry),
-                )
-                # convert ASCII zero-terminated string to Unicode string
-                lump_info[start_lump + i].name = (
-                    lump_info[start_lump + i].name.decode("utf-8").split("\x00")[0]
+                ofs, leng, name = struct.unpack("<i i 8s", entry)
+                lump_info.append(
+                    LumpInfo(
+                        f,
+                        ofs,
+                        leng,
+                        # convert ASCII zero-terminated string to Unicode string
+                        name.decode("utf-8").split("\x00")[0],
+                    )
                 )
                 print(repr(lump_info[start_lump + i].name))
     except IOError:
@@ -115,6 +117,7 @@ def get_num_for_name(name: str) -> int:
     if i == -1:
         print(f"{get_num_for_name.__qualname__}: {name} not found", file=sys.stderr)
         exit(1)
+    return i
 
 
 def lump_length(lump: int) -> int:
