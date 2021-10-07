@@ -10264,6 +10264,8 @@ Sine lookup.
 
 Guess what, serves as cosine, too.
 Remarkable thing is, how to use BAMs with this?
+
+:meta hide-value:
 """
 
 fine_tangent = (
@@ -14368,6 +14370,8 @@ fine_tangent = (
 Tangents LUT.
 
 Should work with BAM fairly well (12 of 16bit, effectively, by shifting).
+
+:meta hide-value:
 """
 
 tan_to_angle = (
@@ -16425,6 +16429,8 @@ tan_to_angle = (
 ArcTan LUT.
 
 Maps tan(angle) to angle fast.
+
+:meta hide-value:
 """
 
 
