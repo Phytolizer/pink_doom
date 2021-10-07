@@ -9,6 +9,8 @@ Subpackages
 
    pink_doom.doom
    pink_doom.misc
+   pink_doom.playsim
+   pink_doom.rendering
    pink_doom.wad
 
 Submodules
