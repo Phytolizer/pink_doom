@@ -4,7 +4,6 @@ from enum import Enum, auto
 from typing import Any, Optional
 
 from pink_doom.doom.data import NodeFlag
-from pink_doom.doom.defines import SCREEN_WIDTH
 from pink_doom.misc.fixed import Fixed
 from pink_doom.playsim.mobj import MapObject
 from pink_doom.playsim.mobjflag import MapObjectFlag
@@ -352,10 +351,10 @@ class SpriteFrame:
     rotate: bool
     """If false, use 0 for any position."""
 
-    lump: tuple[8 * (int,)]
+    lump: list[int]
     """Lump to use for view angles 0-7."""
 
-    flip: tuple[8 * (bool,)]
+    flip: list[bool]
     """Flip bit to use for view angles 0-7."""
 
 
@@ -381,5 +380,5 @@ class Visplane:
     maxx: int
 
     # Here lies the rub for all dynamic resize / change of resolution.
-    top: tuple[SCREEN_WIDTH * (int,)]
-    bottom: tuple[SCREEN_WIDTH * (int,)]
+    top: list[int]
+    bottom: list[int]
