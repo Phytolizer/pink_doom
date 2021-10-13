@@ -10,7 +10,7 @@ from typing import Callable, Optional
 
 from pink_doom.doom.defines import SCREEN_WIDTH
 from pink_doom.misc.bbox import BoxCoord
-from pink_doom.misc.fixed import FRAC_BITS, Fixed, fixed_div, fixed_mul
+from pink_doom.misc.fixed import FRAC_BITS, FRAC_UNIT, Fixed, fixed_div, fixed_mul
 from pink_doom.misc.tables import (
     ANG90,
     ANG180,
@@ -19,10 +19,11 @@ from pink_doom.misc.tables import (
     DBITS,
     FINE_ANGLES,
     fine_sine,
+    fine_tangent,
     slope_div,
     tan_to_angle,
 )
-from pink_doom.pink_doom.doom.player import Player
+from pink_doom.rendering import state
 from pink_doom.rendering.defines import LightTable, Node, Seg
 
 _FIELDOFVIEW = 2048
@@ -47,38 +48,13 @@ sscount = 0
 linecount = 0
 loopcount = 0
 
-viewx: Fixed = 0
-viewy: Fixed = 0
-viewz: Fixed = 0
-
-viewangle = 0
-
 viewcos: Fixed = 0
 viewsin: Fixed = 0
-
-viewplayer: Optional[Player] = None
 
 detailshift = 0
 """0 = high, 1 = low"""
 
 clipangle = 0
-
-viewangletox: list[int] = [0 for _ in range(FINE_ANGLES // 2)]
-"""
-Maps the visible view angles to screen X coordinates.
-
-Flattens the arc to a flat projection plane.
-There will be many angles mapped to the same X.
-"""
-
-xtoviewangle: list[int] = [0 for _ in range(SCREEN_WIDTH + 1)]
-"""
-Maps a screen pixel to the lowest viewangle that maps back to x.
-
-Ranges from ``clipangle`` to ``-clipangle``.
-"""
-
-fine_cosine = fine_sine[FINE_ANGLES // 4 :]
 
 LIGHTLEVELS = 16
 """Now why not 32 here?"""
@@ -88,6 +64,8 @@ MAXLIGHTSCALE = 48
 LIGHTSCALESHIFT = 12
 MAXLIGHTZ = 128
 LIGHTZSHIFT = 20
+
+NUMCOLORMAPS = 32
 
 scalelight: list[list[Optional[LightTable]]] = [
     [None for _ in range(LIGHTLEVELS)] for _ in range(MAXLIGHTSCALE)
@@ -248,12 +226,94 @@ def point_to_dist(x: Fixed, y: Fixed) -> Fixed:
     return fixed_div(dx, fine_sine[angle])
 
 
-# TODO
-# def scale_from_global_angle(visangle: int) -> Fixed:
-#     """
-#     Return the texture mapping scale for the current line at the given angle.
+def scale_from_global_angle(visangle: int) -> Fixed:
+    """
+    Return the texture mapping scale for the current line at the given angle.
 
-#     ``rw_distance`` must be calculated first.
-#     """
-#     anglea = ANG90 + (visangle - viewangle)
-#     angleb = ANG90 + (visangle - rw_normalangle)
+    ``rw_distance`` must be calculated first.
+    """
+    anglea = ANG90 + (visangle - state.viewangle)
+    angleb = ANG90 + (visangle - state.rw_normalangle)
+
+    sinea = fine_sine[anglea >> ANGLE_TO_FINE_SHIFT]
+    sineb = fine_sine[angleb >> ANGLE_TO_FINE_SHIFT]
+    num = fixed_mul(projection, sineb) << detailshift
+    den = fixed_mul(state.rw_distance, sinea)
+    if den > (num >> 16):
+        scale = fixed_div(num, den)
+        scale = max(256, min(64 * FRAC_UNIT, scale))
+    else:
+        scale = 64 * FRAC_UNIT
+
+    return scale
+
+
+def init_texture_mapping():
+    """Initialize texture map globals."""
+    # Use tangent table to initialize viewangletox:
+    #  viewangletox will give the next greatest x
+    #  after the view angle.
+    #
+    # Calc focallength
+    #  so _FIELDOFVIEW angles covers SCREEN_WIDTH.
+    focallength = fixed_div(
+        centerxfrac, fine_tangent[FINE_ANGLES // 4 + _FIELDOFVIEW // 2]
+    )
+
+    for i in range(FINE_ANGLES // 2):
+        if fine_tangent[i] > FRAC_UNIT * 2:
+            t = -1
+        elif fine_tangent[i] < -FRAC_UNIT * 2:
+            t = state.viewwidth + 1
+        else:
+            t = fixed_mul(fine_tangent[i], focallength)
+            t = (centerxfrac - t + FRAC_UNIT - 1) >> FRAC_BITS
+
+            t = max(-1, min(state.viewwidth + 1, t))
+        state.viewangletox[i] = t
+
+    # Scan viewangletox to generate xtoviewangle:
+    #  xtoviewangle will give the smallest view angle
+    #  that maps to x.
+    for x in range(state.viewwidth):
+        i = 0
+        while state.viewangletox[i] > x:
+            i += 1
+        state.xtoviewangle[x] = (i << ANGLE_TO_FINE_SHIFT) - ANG90
+
+    # Take out the fencepost cases from viewangletox.
+    for i in range(FINE_ANGLES // 2):
+        t = fixed_mul(fine_tangent[i], focallength)
+        t = centerx - t
+        if state.viewangletox[i] == -1:
+            state.viewangletox[i] = 0
+        elif state.viewangletox[i] == state.viewwidth + 1:
+            state.viewangletox[i] = state.viewwidth
+
+    global clipangle
+    clipangle = state.xtoviewangle[0]
+
+
+_DISTMAP = 2
+
+
+def init_light_tables():
+    """
+    Only init the zlight table.
+
+    This is because the scalelight table changes with view size.
+    """
+    # Calculate the light levels to use
+    #  for each level / distance combination.
+    for i in range(LIGHTLEVELS):
+        startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS // LIGHTLEVELS
+        for j in range(MAXLIGHTZ):
+            scale = fixed_div((SCREEN_WIDTH // 2 * FRAC_UNIT), (j + 1) << LIGHTZSHIFT)
+            scale >>= LIGHTSCALESHIFT
+            level = startmap - scale // _DISTMAP
+
+            if level < 0:
+                level = 0
+            if level >= NUMCOLORMAPS:
+                level = NUMCOLORMAPS - 1
+            zlight[i][j] = state.colormaps[level * 256]
